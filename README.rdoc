@@ -14,13 +14,12 @@ If you have rails installed you should be able to try it out using:
 
 Then for a list of options
 
-	>fusegen help
-
+    >fusegen help
 
 Generate a camel project using 2.10.0.redhat-60060
 
-	>fusegen -f 60060 fuse camel-basic
+    >fusegen -f 60060 fuse camel-basic
 
 Generate a camel project using 2.10.0.redhat-60024
 
-	>fusegen -f 60024 fuse camel-basic
+    >fusegen -f 60024 fuse camel-basic
