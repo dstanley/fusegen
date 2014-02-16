@@ -1,0 +1,6 @@
+= fusegen
+
+Describe your project here
+
+:include:fusegen.rdoc
+
