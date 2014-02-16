@@ -71,7 +71,7 @@ private
     base = 'https://raw.github.com/dstanley/fusegen-templates/master/archetypes/'
     base = options[:gitbase] unless options[:gitbase].nil?
     
-    base = base  + options[:cmd] + '/'
+    base = base  + options[:category] + '/'
     
     begin
        #remove_file destination       

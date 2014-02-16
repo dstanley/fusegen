@@ -10,116 +10,171 @@ require 'pp'
 
 # dev mode run: bundle exec bin/fusegen
 
-program_desc 'Code Generation for JBoss Fuse!'
+program_desc 'code generation for JBoss Fuse! (and beyond)
 
+HELP
+    fusegen help <command>    - for specific subcommand help'
+    
 version Fusegen::VERSION
 
 
-desc 'Fuse product version [last 5 digits]'
-default_value '60024'
-arg_name '[60xxx|61xxx]'
-flag [:f,:fuseversion]
 
-desc 'Maven groupId for the project'
-default_value 'com.redhat.support'
-arg_name '[groupid]'
-flag [:g,:groupid]
-
-desc 'Maven artifactId for the project'
-default_value 'test-project'
-arg_name '[artifactid]'
-flag [:a,:artifactid]
-
-desc 'Maven packaging for the project'
-default_value 'bundle'
-arg_name '[bundle|jar|war]'
-flag [:p,:packaging]
-
-desc 'Fabric hostname for maven deploy plugin'
-default_value 'localhost'
-arg_name '[hostname]'
-flag [:h,:fabrichost]
+desc 'Project category (e.g. fuse|amq|fabric|patch)'
+default_value 'none'
+arg_name '<category>'
+flag [:c,:category]
 
 
-desc 'Create a boostrap config file that can be used to generate more complex projects'
-arg_name ''
-command :config do |c|
-  #c.desc 'Describe a switch to new'
-  #c.switch :s
-
-  c.desc 'Path to config file'
-  c.default_value './config.yml'
-  c.arg_name '[configfile]'
-  c.flag [:f,:filename]
-  
-  
-  c.action do |global_options,options,args|
-
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
-
-    puts "new command ran"
-  end
-end
-
-desc 'Creates a new JBoss Fuse project'
+desc 'Creates a new project'
 arg_name '[project]'
-command :fuse do |c|
-
+command :new do |c|
   c.action do |global_options,options,args|
-
-    # Your command logic here
-     
-    global_options[:cmd] = "fuse"
-    global_options[:projectversion] = "1.0-SNAPSHOT"
-    global_options[:name] = "JBoss Fuse Project"
-    global_options[:name] = args[0] unless args.nil?
     
+    # As this is a common command we add extra help
+    if global_options[:category] == "none"
+      puts "NAME"
+      puts "    new - Creates a new project"
+      puts ""
+      puts "SYNOPSIS"
+      puts "    fusegen [global options] new [project]"
+      puts ""
+      puts "EXAMPLE"
+      puts "    fusegen -c fuse new camel-base"
+      puts ""
+      raise "No project category provided (use -c <category>). For available categories see 'fusegen quickstarts categories'"    
+    end
+
+    desc 'Fuse product version [last 5 digits]'
+    default_value '60024'
+    arg_name '[60xxx|61xxx]'
+    flag [:f,:fuseversion]
+
+    desc 'Maven groupId for the project'
+    default_value 'com.redhat.support'
+    arg_name '[groupid]'
+    flag [:g,:groupid]
+
+    desc 'Maven artifactId for the project'
+    default_value 'test-project'
+    arg_name '[artifactid]'
+    flag [:a,:artifactid]
+
+    desc 'Maven packaging for the project'
+    default_value 'bundle'
+    arg_name '[bundle|jar|war]'
+    flag [:p,:packaging]
+
+    desc 'Fabric hostname for maven deploy plugin'
+    default_value 'localhost'
+    arg_name '[hostname]'
+    flag [:h,:fabrichost]
+
+    options[:category] = global_options[:category]
+    options[:projectversion] = "1.0-SNAPSHOT"
+    options[:name] = "JBoss Fuse Project"
+    options[:name] = args[0] unless args.nil?
     
     g = Generator.new
     g.generate(global_options,options,args)
-    
-
-    puts "new fuse project"
+  
   end
 end
 
 
-desc 'Creates a new JBoss A-MQ project'
-arg_name '[project]'
-command :amq do |c|
 
-  c.action do |global_options,options,args|
 
-    c.desc 'Project template'
-    c.default_value 'default'
-    c.arg_name '[template]'
-    c.flag [:t,:template]
-
-    global_options[:cmd] = "amq"
-    g = Generator.new
-    g.generate(global_options,options,args)
+desc 'Manage quickstarts'
+command [:qs,:quickstarts] do |c|
+  
+    c.desc "List available quickstarts"
+    c.command :list do |list|
+        list.action do |global_options,options,args|
+          
+          # load top level meta data from each repo
+          # Display by repo by default
+          # If -c then display category list
+          # If -t then display by tag
+          
+          puts "[TODO] list quickstarts"          
+        end
+    end
     
-  end
+    c.desc "List available categories"
+      c.command [:c,:categories] do |categories|
+          categories.action do |global_options,options,args|
+             puts "Available Categories:"
+             puts " fuse       - JBoss Fuse projects"
+             puts " amq        - JBoss A-MQ projects"
+             puts " fabric     - Fuse Fabric projects"
+             puts " patch      - JBoss Fuse patch projects"
+             
+          end
+      end
+    
+    c.desc "Add a github repo to repository db"
+    c.command [:ar,:addrepo] do |repo|
+        repo.action do |global_options,options,args|
+          # Validate input
+          # Save the repo to local config
+          if args.nil? || args.length == 0
+              puts "No repo provided.."
+              help_now!
+          else
+              # ... logic here
+              puts "[TODO] Add repo to config '" + args[0] + "'"
+          end
+        end
+    end
+    
+    c.desc "Show quickstart info for a project"
+    c.arg_name '<name>'
+    c.command :info do |info|
+         info.action do |global_options,options,args|
+          
+           
+           # Validate input
+            if args.nil? || args.length == 0
+              puts "No quickstart name provided.."
+              help_now!
+            else
+              # ... logic here
+              puts "[TODO] show quickstart info for '" + args[0] + "'"
+            end
+           
+         end
+    end
 end
 
 
-desc 'List available pre-canned project templates'
-arg_name ''
-command :list do |c|
-
-  c.action do |global_options,options,args|
-
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
-    global_options[:cmd] = "amq"
-
-    puts "List project templates"
-  end
+desc 'Append to an existing project'
+command :util do |c|
+  
+    c.desc "Add a features file to a project"
+    c.command [:af,:addfeature] do |feature|
+        feature.action do |global_options,options,args|
+          puts "[TODO] Add a features file to a project"          
+        end
+    end
+    
+    # TODO: Command to add maven dependencies for fuse features?
+  
+    c.desc "Add a maven profile to a maven pom"
+    c.arg_name '<name> <className>'
+    c.command [:p,:profile] do |profile|
+         profile.action do |global_options,options,args|
+  
+           
+           # Validate input
+            if args.nil? || args.length == 0
+              puts "No quickstart name provided.."
+              help_now!
+            else
+              # ... logic here
+              puts "[TODO] show quickstart info for '" + args[0] + "'"
+            end
+           
+         end
+    end
 end
 
 
