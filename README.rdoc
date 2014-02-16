@@ -1,6 +1,26 @@
 = fusegen
 
-Describe your project here
+This project creates dynamic quickstarts for JBoss Fuse and JBoss A-MQ.
 
-:include:fusegen.rdoc
+Try it out
+----------
 
+If you have rails installed you should be able to try it out using:
+
+    >git clone https://github.com/dstanley/fusegen.git
+    >rake package
+    >gem install ./pkg/fusegen-0.0.1.gem
+
+
+Then for a list of options
+
+	>fusegen help
+
+
+Generate a camel project using 2.10.0.redhat-60060
+
+	>fusegen -f 60060 fuse camel-basic
+
+Generate a camel project using 2.10.0.redhat-60024
+
+	>fusegen -f 60024 fuse camel-basic
