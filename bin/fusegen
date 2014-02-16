@@ -25,10 +25,39 @@ arg_name '<category>'
 flag [:c,:category]
 
 
+desc 'Git base uri'
+arg_name '[gitbase]'
+flag [:g,:gitbase]
+
 desc 'Creates a new project'
 arg_name '[project]'
 command :new do |c|
-  c.action do |global_options,options,args|
+   c.desc 'Fuse product version [last 5 digits]'
+   c.default_value '60024'
+   c.arg_name '[60xxx|61xxx]'
+   c.flag [:f,:fuseversion]
+
+   c.desc 'Maven groupId for the project'
+   c.default_value 'com.redhat.support'
+   c.arg_name '[groupid]'
+   c.flag [:g,:groupid]
+ 
+   c.desc 'Maven artifactId for the project'
+   c.default_value 'test-project'
+   c.arg_name '[artifactid]'
+   c.flag [:a,:artifactid]
+
+   c.desc 'Maven packaging for the project'
+   c.default_value 'bundle'
+   c.arg_name '[bundle|jar|war]'
+   c.flag [:p,:packaging]
+
+   c.desc 'Fabric hostname for maven deploy plugin'
+   c.default_value 'localhost'
+   c.arg_name '[hostname]'
+   c.flag [:h,:fabrichost]
+    
+   c.action do |global_options,options,args|
     
     # As this is a common command we add extra help
     if global_options[:category] == "none"
@@ -36,42 +65,17 @@ command :new do |c|
       puts "    new - Creates a new project"
       puts ""
       puts "SYNOPSIS"
-      puts "    fusegen [global options] new [project]"
+      puts "    fusegen [global options] new [quickstart]"
       puts ""
       puts "EXAMPLE"
       puts "    fusegen -c fuse new camel-base"
       puts ""
-      raise "No project category provided (use -c <category>). For available categories see 'fusegen quickstarts categories'"    
+      raise "No category provided (use -c <category>). For available categories see 'fusegen quickstart categories'"    
     end
-
-    desc 'Fuse product version [last 5 digits]'
-    default_value '60024'
-    arg_name '[60xxx|61xxx]'
-    flag [:f,:fuseversion]
-
-    desc 'Maven groupId for the project'
-    default_value 'com.redhat.support'
-    arg_name '[groupid]'
-    flag [:g,:groupid]
-
-    desc 'Maven artifactId for the project'
-    default_value 'test-project'
-    arg_name '[artifactid]'
-    flag [:a,:artifactid]
-
-    desc 'Maven packaging for the project'
-    default_value 'bundle'
-    arg_name '[bundle|jar|war]'
-    flag [:p,:packaging]
-
-    desc 'Fabric hostname for maven deploy plugin'
-    default_value 'localhost'
-    arg_name '[hostname]'
-    flag [:h,:fabrichost]
-
+    
     options[:category] = global_options[:category]
     options[:projectversion] = "1.0-SNAPSHOT"
-    options[:name] = "JBoss Fuse Project"
+    options[:name] = "my-fusegen-project"
     options[:name] = args[0] unless args.nil?
     
     g = Generator.new
@@ -86,7 +90,7 @@ end
 desc 'Manage quickstarts'
 command [:qs,:quickstarts] do |c|
   
-    c.desc "List available quickstarts"
+    c.desc "List available quickstart project templates"
     c.command :list do |list|
         list.action do |global_options,options,args|
           
@@ -95,7 +99,7 @@ command [:qs,:quickstarts] do |c|
           # If -c then display category list
           # If -t then display by tag
           
-          puts "[TODO] list quickstarts"          
+          puts "camel-base"          
         end
     end
     
