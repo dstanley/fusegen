@@ -55,7 +55,7 @@ private
           destination.gsub! '@base_path',base_path
           copy_from_github source, destination, options
         end
-      
+        
         project["subs"].each do |subs|      
           subs[1].each do |sub| 
              file = options[:name] + '/' + subs[0].dup
@@ -136,7 +136,7 @@ private
       when "@karaf_version"
         get_version(options[:fuseversion],"karaf")
       when "@spring_version"
-        get_version(options[:fuseversion],"spring")
+        options[:fuseversion],"spring"
       when "@fabric_host" 
         "@" + options[:fabrichost]
       else
