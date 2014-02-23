@@ -19,15 +19,10 @@ version Fusegen::VERSION
 
 
 
-desc 'Project category (e.g. fuse|amq|fabric|patch)'
-default_value 'none'
-arg_name '<category>'
-flag [:c,:category]
+desc 'Debug output'
+flag [:debug]
 
 
-desc 'Git base uri'
-arg_name '[gitbase]'
-flag [:g,:gitbase]
 
 desc 'Creates a new project'
 arg_name '[project]'
@@ -79,7 +74,7 @@ command :new do |c|
     options[:name] = args[0] unless args.nil?
     
     g = Generator.new
-    g.generate(global_options,options,args)
+    g.new_project(global_options,options,args)
   
   end
 end
@@ -94,91 +89,104 @@ command [:qs,:quickstarts] do |c|
     c.command :list do |list|
         list.action do |global_options,options,args|
           
-          # load top level meta data from each repo
-          # Display by repo by default
-          # If -c then display category list
-          # If -t then display by tag
-          
-          puts "camel-base"          
+          g = Generator.new
+          g.qs_list(global_options,options,args)             
         end
     end
     
-    c.desc "List available categories"
-      c.command [:c,:categories] do |categories|
-          categories.action do |global_options,options,args|
-             puts "Available Categories:"
-             puts " fuse       - JBoss Fuse projects"
-             puts " amq        - JBoss A-MQ projects"
-             puts " fabric     - Fuse Fabric projects"
-             puts " patch      - JBoss Fuse patch projects"
-             
-          end
-      end
-    
-    c.desc "Add a github repo to repository db"
-    c.command [:ar,:addrepo] do |repo|
-        repo.action do |global_options,options,args|
-          # Validate input
-          # Save the repo to local config
-          if args.nil? || args.length == 0
-              puts "No repo provided.."
-              help_now!
-          else
-              # ... logic here
-              puts "[TODO] Add repo to config '" + args[0] + "'"
-          end
-        end
-    end
-    
-    c.desc "Show quickstart info for a project"
+
+    c.desc "Show quickstart info for a project template"
     c.arg_name '<name>'
     c.command :info do |info|
          info.action do |global_options,options,args|
-          
-           
            # Validate input
             if args.nil? || args.length == 0
               puts "No quickstart name provided.."
               help_now!
             else
-              # ... logic here
-              puts "[TODO] show quickstart info for '" + args[0] + "'"
+               g = Generator.new
+               g.qs_info(global_options,options,args)  
             end
-           
          end
     end
 end
 
+desc 'Manage quickstart repositories'
+command :repo do |c|
 
-desc 'Append to an existing project'
-command :util do |c|
-  
-    c.desc "Add a features file to a project"
-    c.command [:af,:addfeature] do |feature|
-        feature.action do |global_options,options,args|
-          puts "[TODO] Add a features file to a project"          
+    c.desc "Add a local or git quickstart repo"
+    c.arg_name '<path>'
+    c.command [:add] do |addrepo|
+      addrepo.action do |global_options,options,args|
+        if args.nil? || args.length == 0 then
+            puts "No path to repository provided."
+            help_now!
+        else
+            g = Generator.new
+            g.repo_add(global_options,options,args)  
+        end
+      end
+    end
+    
+    c.desc "Remove a local or git quickstart repo"
+    c.command [:rm] do |rm|
+        rm.action do |global_options,options,args|
+          # Validate input
+          # Save the repo to local config
+          if args.nil? || args.length == 0
+              puts "No repository identifier provided."
+              help_now!
+          else
+               g = Generator.new
+               g.repo_rm(global_options,options,args)  
+          end
         end
     end
     
-    # TODO: Command to add maven dependencies for fuse features?
-  
-    c.desc "Add a maven profile to a maven pom"
-    c.arg_name '<name> <className>'
-    c.command [:p,:profile] do |profile|
-         profile.action do |global_options,options,args|
-  
-           
-           # Validate input
-            if args.nil? || args.length == 0
-              puts "No quickstart name provided.."
-              help_now!
-            else
-              # ... logic here
-              puts "[TODO] show quickstart info for '" + args[0] + "'"
-            end
-           
-         end
+    c.desc "List available quickstart repos"
+    c.command [:list] do |list|
+        list.action do |global_options,options,args|
+          g = Generator.new
+          g.repo_list(global_options,options,args)  
+      
+        end
     end
+  
+
+    
+end 
+
+
+
+desc 'Append to an existing project'
+command :add do |c|
+    
+    g = Generator.new   
+     
+    c.desc "Add a karaf features file to a project"
+    c.command [:af,:feature] do |feature|
+        feature.action do |global_options,options,args|
+            g.add_feature
+        end
+    end
+    
+    c.desc "Add an index.yml to a fusegen template repository"
+    c.command [:ai,:index] do |index|
+        index.action do |global_options,options,args|
+            g.add_index 
+        end
+    end
+    
+    c.desc "Add an Readme.md to a project"
+    c.command [:readme] do |readme|
+        readme.action do |global_options,options,args|
+            g.add_readme
+        end
+    end
+    
+    # Other possible add
+    # Add a fabric deploy script
+    # Add a profile to a maven pom?
 end
 
 
