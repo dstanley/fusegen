@@ -104,7 +104,7 @@ class Generator < Thor
           puts ">fusegen repo add <repository>"
           puts ""
           puts "EXAMPLE:"
-          puts ">fusegen repo add https://raw.github.com/dstanley/fusegen-templates/master/archetypes/"
+          puts ">fusegen repo add https://raw.github.com/dstanley/fusegen-templates/master/"
         end
       
         repos.each do |key, value|
