@@ -2,13 +2,13 @@
 
 This project creates dynamic quickstarts for JBoss Fuse and JBoss A-MQ.
 
-**Pre-Requisites:**
+*Pre-Requisites*
 
 Ruby and RubyGems installed on your local machine.
 
 
-**Try it out**
-----------
+*Try it out*
+
 
     >gem install fusegen
 
@@ -17,7 +17,7 @@ Then for a list of options
     >fusegen help
 
 
-**CONFIGURE & QUERY**
+*CONFIGURE & QUERY*
 
 
 Add a repo to your configuration
@@ -30,7 +30,7 @@ Query the available quickstarts
 
 
 
-**EXAMPLES**
+*EXAMPLES*
 
 Generate a camel project using defaults
 
@@ -54,7 +54,7 @@ Generate a multi-threaded jms producer
 
 
 
-**LATEST**
+*LATEST*
 
 To install from the latest source
     
