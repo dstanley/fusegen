@@ -39,7 +39,7 @@ Examples
 
 Generate a camel project using defaults
 
-    >fusegen new camel-basic
+    >fusegen new camel-base
 
 Generate a camel project using 2.10.0.redhat-60060
 
