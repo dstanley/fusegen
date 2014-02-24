@@ -13,7 +13,8 @@ spec = Gem::Specification.new do |s|
 ")
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','fusegen.rdoc']
+  
+  s.extra_rdoc_files = ['fusegen.rdoc']
   s.rdoc_options << '--title' << 'fusegen' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'fusegen'
