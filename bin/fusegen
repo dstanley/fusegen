@@ -20,9 +20,7 @@ version Fusegen::VERSION
 
 
 desc 'Debug output'
-flag [:debug]
-
-
+switch [:debug], { :negatable => false }
 
 desc 'Creates a new project'
 arg_name '[project]'
@@ -164,14 +162,14 @@ command :add do |c|
     g = Generator.new   
      
     c.desc "Add a karaf features file to a project"
-    c.command [:af,:feature] do |feature|
+    c.command [:feature] do |feature|
         feature.action do |global_options,options,args|
             g.add_feature
         end
     end
     
     c.desc "Add an index.yml to a fusegen template repository"
-    c.command [:ai,:index] do |index|
+    c.command [:index] do |index|
         index.action do |global_options,options,args|
             g.add_index 
         end

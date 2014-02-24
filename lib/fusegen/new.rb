@@ -26,11 +26,15 @@ class Generator < Thor
                 say_info ":gitbase " + options[:gitbase]
                 say_info ":gitbase " + options[:category]
               end
+              
+              if not options[:gitbase].end_with?('/')
+                options[:gitbase] = options[:gitbase] + "/"
+              end
              
               say_task "Creating " + options[:name] 
               
               # Download manifest
-              copy_from_github 'manifest.yml', 'manifest.yml', options
+              copy_from_repo 'manifest.yml', 'manifest.yml', options
 
               project = load_file 'manifest.yml', options
 
@@ -38,7 +42,7 @@ class Generator < Thor
 
                 project["copies"].each do |source, destination| 
                   destination.gsub! '@base_path',base_path
-                  copy_from_github source, destination, options
+                  copy_from_repo source, destination, options
                 end
 
                 project["subs"].each do |subs|      

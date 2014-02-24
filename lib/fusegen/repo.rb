@@ -44,15 +44,13 @@ class Generator < Thor
           # convert to a raw github uri if we need to
           path = path.gsub(/\/github.com/, "\/raw.github.com")
           options[:gitbase] = path
-          copy_from_github 'index.yml', '.index', options
+          copy_from_repo 'index.yml', '.index', options
         else
           copy_file path + "/index.yml", ".index", options
         end
   
         config = YAML.load_file(".index")
   
-        pp config
-
         meta = config["meta"] 
         if meta && meta["baseuri"] && meta["author"] 
           meta["expires"] = Time.now + (3*24*60*60) # cache for 3 days
@@ -95,13 +93,23 @@ class Generator < Thor
     def do_repo_list(options={})
       begin 
         repos = load_file "~/.fusegen/repos"
+        
+        # if the repo is empty, write a default repo
       
         if repos.size > 0 
-          printf "%-20s\n", "Repository"
+          printf "%-12s %-20s\n", "Repository", "Location"
+        else
+          puts "No repositories have been configured yet. Try and add a repository e.g."
+          puts ""
+          puts ">fusegen repo add <repository>"
+          puts ""
+          puts "EXAMPLE:"
+          puts ">fusegen repo add https://raw.github.com/dstanley/fusegen-templates/master/archetypes/"
         end
       
         repos.each do |key, value|
-          printf "[%-20s] \n", key
+          index = load_file "~/.fusegen/#{key}/index"
+          printf "[%-10s] %-20s \n", key, index["meta"]["baseuri"]
         end
   
       rescue Exception => e  

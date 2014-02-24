@@ -21,10 +21,10 @@ class Generator < Thor
     end
     
 
-    def copy_from_github(source, destination, options = {})
-      base = 'https://raw.github.com/dstanley/fusegen-templates/master/archetypes/'
-      prefix = ""
+    def copy_from_repo(source, destination, options = {})
+      
       base = options[:gitbase] unless options[:gitbase].nil?    
+      prefix = ""
 
       # true when creating a new project
       if options[:category] != "none" && options[:name]
@@ -33,10 +33,18 @@ class Generator < Thor
       end
 
       begin
-         #remove_file destination     
-         get base + source, prefix + destination, options
-      rescue OpenURI::HTTPError
-         say_error "Unable to download " + base + source
+         #remove_file destination  
+         if base =~ /http/
+           get base + source, prefix + destination, options
+         else
+           copy_file base + source, prefix + destination, options
+         end
+      rescue Exception => e 
+         say_error "Unable to load " + base + source
+         if options[:debug] 
+             puts e.message  
+             puts e.backtrace
+         end         
       end    
     end
 

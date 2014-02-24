@@ -15,7 +15,7 @@ class Generator < Thor
       puts "[TODO] Add a feature file"
     end
     
-    def add_feature
+    def add_readme
       puts "[TODO] Add a readme file"
     end
     
