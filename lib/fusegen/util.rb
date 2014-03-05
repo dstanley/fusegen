@@ -102,7 +102,7 @@ class Generator < Thor
         end
     end
     
-    def get_quickstarts 
+    def get_quickstarts(options={}) 
       repos = load_file "~/.fusegen/repos"
 
       quickstarts = {}
@@ -117,7 +117,7 @@ class Generator < Thor
         if meta && meta["expires"] < Time.now
           options[:gitbase] = meta["baseuri"]
           do_repo_add options, meta["baseuri"]
-          index = load_file "~/.fusegen/#{path}/index"
+          index = load_file "~/.fusegen/#{value["meta"]}/index"
         end
         
         index["quickstarts"].each do |category, meta|

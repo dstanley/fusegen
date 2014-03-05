@@ -24,7 +24,7 @@ class Generator < Thor
     
     def do_qs_list(options={})
       begin 
-        quickstarts = get_quickstarts
+        quickstarts = get_quickstarts(options)
         
         if quickstarts.size > 0 
           printf "%-10s %-12s %-10s %-20s %-60s\n", "Version", "Repository", "Category", "Name", "Description"
