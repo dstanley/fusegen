@@ -35,7 +35,7 @@ class Generator < Thor
 
     def do_repo_add(path, options={})
       begin
-
+                
         options[:verbose] = false
         if path =~ /http/
           if not path.end_with?('/')

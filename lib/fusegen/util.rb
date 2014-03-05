@@ -116,7 +116,7 @@ class Generator < Thor
         # refresh index if its expired
         if meta && meta["expires"] < Time.now
           options[:gitbase] = meta["baseuri"]
-          do_repo_add options, meta["baseuri"]
+          do_repo_add meta["baseuri"], options
           index = load_file "~/.fusegen/#{value["meta"]}/index"
         end
         
