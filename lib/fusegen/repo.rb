@@ -20,10 +20,6 @@ class Generator < Thor
     def repo_rm(global_options,options,args)
       do_repo_rm args[0], options
     end
-
-    def repo_find_template(name)
-      do_repo_find_template name
-    end
     
     private
     
@@ -67,8 +63,10 @@ class Generator < Thor
         remove_file ".index", options
   
       rescue Exception => e  
-        puts e.message  
-        puts e.backtrace
+        if options[:debug]
+          puts e.message  
+          puts e.backtrace
+        end
       end
     end
   
@@ -118,10 +116,6 @@ class Generator < Thor
       end 
     end
     
-    
-    def do_repo_find_template(name)
-      
-    end
     
   end
 end

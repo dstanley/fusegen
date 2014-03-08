@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'thor'
-
+require 'yaml'
 
 
 class Generator < Thor
@@ -40,7 +40,7 @@ class Generator < Thor
            copy_file base + source, prefix + destination, options
          end
       rescue Exception => e 
-         say_error "Unable to load " + base + source
+         say_error "Unable to copy, base: '" + base.to_s + "' source: '" + source.to_s + "'"
          if options[:debug] 
              puts e.message  
              puts e.backtrace
@@ -60,7 +60,9 @@ class Generator < Thor
           file = options[:name] + '/' + file
         end
         cfg = YAML.load_file(file)
-      rescue Exception => e        
+      rescue Exception => e  
+        puts e.message
+        puts e.backtrace      
       end
       cfg
     end
@@ -103,8 +105,12 @@ class Generator < Thor
     end
     
     def get_quickstarts(options={}) 
-      repos = load_file "~/.fusegen/repos"
-
+      if options[:index]
+        repos = load_file "~/.fusegen/repos"
+      else      
+        repos = load_file "~/.fusegen/repos"
+      end
+      
       quickstarts = {}
       repos.each do |key, value|
 
@@ -133,6 +139,51 @@ class Generator < Thor
       end
       quickstarts
     end
+    
+    def find_quickstart(options)
+       # load all know quickstarts from cache
+       quickstarts = get_quickstarts options
+       candidates = {}
+       quickstarts.each do |category, meta|
+           meta.each do |template|
+             # find a match by quickstart name
+             if template["name"] == options[:name]
+               candidates[template["repo"]] = template
+             end
+          end
+       end
+       
+       if candidates.length > 0
+         # if we have > matches on the name, give user a choice
+         if candidates.length > 1
+           index = 1
+           choices = []
+         
+           printf "%-3s [%-12s] %-10s %-20s %-60s\n", "Index", "Repository", "Category", "Name", "Description"
+           candidates.each do |category, template|
+             printf "%-5s [%-12s] %-10s %-20s %-60s\n", index.to_s, template["repo"], template["category"], template["name"], template["short_description"]                
+             choices << index.to_s    
+             index += 1
+           end
+    
+           say_info "Multiple matches for #{options[:name]}. "
+           selection = ask("Choose quickstart: [" + choices.join(",") + "]").to_i - 1
+           if not candidates.to_a[selection].nil? then
+             template = candidates.to_a[selection]
+             return template[1]
+           else
+             say_error "Choice was not valid."
+           end
+         else
+           # We only found one match for that quickstart name
+           candidates.each do |category, template|
+             return template
+           end
+         end             
+       end
+       nil
+    end
+    
 
     def get_version(project_version, component, composite=true) 
       if composite
@@ -146,8 +197,8 @@ class Generator < Thor
        say "\033[1m\033[32m" + "task".rjust(10) + "\033[0m" + "  #{name} .." 
     end
     
-    def say_info(name)
-       say "\033[1m\033[36m" + "info".rjust(10) + "\033[0m" + "  #{name}" 
+    def say_debug(name)
+       say "\033[1m\033[36m" + "debug".rjust(11) + "\033[0m" + "   #{name}" 
     end
     
     def say_warn(name)

@@ -11,15 +11,38 @@ class Generator < Thor
       do_qs_list
     end
 
-    def qs_info(global_options,options,args)
+    def qs_info(options,args)
       do_qs_info args[0], options
     end
 
     
     private
 
-    def do_qs_info(template, options={})
-      puts "[TODO] show readme for quickstart .."
+    def do_qs_info(qs, options={})    
+      begin  
+        options[:name] = qs
+        template = find_quickstart options   
+      
+        options[:gitbase] = template["baseuri"] 
+        base_uri = template["category"] + "/" + template["name"] + "/"
+       
+        if not options[:gitbase].end_with?('/')
+          options[:gitbase] = options[:gitbase] + "/"
+        end
+        options[:category] = "none"
+        options[:verbose] = false
+        copy_from_repo base_uri + "README.md", ".readme", options
+        file = File.open(".readme", "rb")
+        contents = file.read
+        file.close
+        remove_file ".readme", { :verbose => false } 
+        printf contents
+        true
+      rescue Exception => e  
+        puts e.message  
+        puts e.backtrace
+        false
+      end
     end
     
     def do_qs_list(options={})

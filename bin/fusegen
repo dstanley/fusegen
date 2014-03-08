@@ -72,7 +72,7 @@ command :new do |c|
     options[:name] = args[0] unless args.nil?
     
     g = Generator.new
-    g.new_project(global_options,options,args)
+    g.new_project(options)
   
   end
 end
@@ -103,7 +103,7 @@ command [:qs,:quickstarts] do |c|
               help_now!
             else
                g = Generator.new
-               g.qs_info(global_options,options,args)  
+               g.qs_info(options,args)  
             end
          end
     end
