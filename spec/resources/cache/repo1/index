@@ -1,0 +1,33 @@
+--- 
+meta: 
+  expires: 2020-03-08 08:58:27.560037 -05:00
+  author: dstanley
+  version: 0.0.1
+  baseuri: https://raw.github.com/dstanley/fusegen-templates/master
+quickstarts: 
+  amq: 
+  - name: amq-consumer
+    short_description: Creates a JMS Consumer
+    manifest: manifest.yml
+    version: 0.0.1
+  - name: amq-consumer-spring
+    short_description: Creates a spring DMLC JMS Consumer
+    manifest: manifest.yml
+    version: 0.0.1
+  - name: amq-producer
+    short_description: Creates a multi-threaded JMS Producer
+    manifest: manifest.yml
+    version: 0.0.1
+  fuse: 
+  - name: camel-base
+    short_description: OSGi Blueprint Camel route. Uses timer to trigger java bean invocation.
+    manifest: manifest.yml
+    version: 0.0.1
+  - name: cxf-raw-http-client
+    short_description: Reads in a raw soap message and fires it at a soap endpoint.
+    manifest: manifest.yml
+    version: 0.0.1
+  - name: cxf-wsdl-first
+    short_description: Creates an OSGi wsdl-first cxf spring project.
+    manifest: manifest.yml
+    version: 0.0.1

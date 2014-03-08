@@ -1,0 +1,12 @@
+--- 
+meta: 
+  expires: 2020-03-08 08:58:22.401739 -05:00
+  author: dstanley
+  version: 0.0.1
+  baseuri: ./test/resources/testrepo
+quickstarts: 
+  test: 
+  - name: test-client
+    short_description: Helper client test appl
+    manifest: manifest.yml
+    version: 0.0.1
