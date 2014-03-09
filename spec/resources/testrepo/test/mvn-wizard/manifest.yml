@@ -1,0 +1,25 @@
+--- 
+subs: 
+  src/main/java/@base_path/Broker.java: 
+  - "@package"
+  pom.xml: 
+  - "@project_version"
+  - "@group_id"
+  - "@artifact_id"
+  - "@packaging"
+  - "@project_version"
+  - "@name"
+  - "@activemq_version"
+  - "@spring_version"
+  - "@package"
+  src/main/resources/log4j.xml: 
+  - "@package"
+copies: 
+  src/main/java/org/fusegen/test/Broker.java: src/main/java/@base_path/Broker.java
+  src/main/resources/log4j.xml: src/main/resources/log4j.xml
+  pom.xml: pom.xml
+  README.md: README.md
+wizard_name: AmqWizard
+short_description: Test a wizard based template
+description: Creates dynamic broker configurations
+version: 0.0.1

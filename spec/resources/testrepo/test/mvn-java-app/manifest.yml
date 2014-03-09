@@ -1,0 +1,27 @@
+--- 
+subs: 
+  src/main/java/@base_path/Consumer.java: 
+  - "@package"
+  src/main/java/@base_path/CommandLineSupport.java: 
+  - "@package"
+  pom.xml: 
+  - "@project_version"
+  - "@group_id"
+  - "@artifact_id"
+  - "@packaging"
+  - "@project_version"
+  - "@name"
+  - "@activemq_version"
+  - "@spring_version"
+  - "@package"
+  src/main/resources/log4j.xml: 
+  - "@package"
+copies: 
+  src/main/java/org/fusesource/support/Consumer.java: src/main/java/@base_path/Consumer.java
+  src/main/java/org/fusesource/support/CommandLineSupport.java: src/main/java/@base_path/CommandLineSupport.java
+  src/main/resources/log4j.xml: src/main/resources/log4j.xml
+  pom.xml: pom.xml
+  README.md: README.md
+short_description: Creates a JMS Consumer
+description: Creates a JMS Consumer
+version: 0.0.1

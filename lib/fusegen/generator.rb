@@ -5,6 +5,7 @@ require 'fusegen/new'
 require 'fusegen/add'
 require 'fusegen/quickstart'
 require 'fusegen/util'
+require 'fusegen/wizard'
 
 class Generator < Thor
   include Thor::Actions
@@ -14,9 +15,12 @@ class Generator < Thor
   include Generator::Add
   include Generator::Quickstart
   include Generator::Util
+  include Generator::Wizard
+  
   
   attr_accessor :versions
-
+  attr_accessor :wizard
+  
   def self.source_root
     File.dirname(__FILE__)
   end

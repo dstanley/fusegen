@@ -3,10 +3,14 @@ meta:
   expires: 2020-03-08 08:58:22.401739 -05:00
   author: dstanley
   version: 0.0.1
-  baseuri: ./test/resources/testrepo
+  baseuri: /spec/resources/testrepo
 quickstarts: 
   test: 
-  - name: test-client
-    short_description: Helper client test appl
+  - name: mvn-wizard
+    short_description: Maven local wizard test
+    manifest: manifest.yml
+    version: 0.0.1
+  - name: mvn-java-app
+    short_description: Maven local java app test
     manifest: manifest.yml
     version: 0.0.1

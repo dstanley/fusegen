@@ -105,17 +105,21 @@ class Generator < Thor
     end
     
     def get_quickstarts(options={}) 
+      
+      index_root = "~/.fusegen"
+      
       if options[:index]
-        repos = load_file "~/.fusegen/repos"
-      else      
-        repos = load_file "~/.fusegen/repos"
+        index_root = options[:index]
       end
+      
+      repos = load_file  index_root + "/repos"
+
       
       quickstarts = {}
       repos.each do |key, value|
 
         # load the index
-        index = load_file "~/.fusegen/#{value["meta"]}/index"
+        index = load_file index_root + "/#{value["meta"]}/index"
 
         meta = index["meta"]
         
@@ -123,7 +127,7 @@ class Generator < Thor
         if meta && meta["expires"] < Time.now
           options[:gitbase] = meta["baseuri"]
           do_repo_add meta["baseuri"], options
-          index = load_file "~/.fusegen/#{value["meta"]}/index"
+          index = load_file index_root + "/#{value["meta"]}/index"
         end
         
         index["quickstarts"].each do |category, meta|
@@ -141,19 +145,29 @@ class Generator < Thor
     end
     
     def find_quickstart(options)
+       if options[:debug]
+          say_debug "find quickstart " + options[:name] 
+       end
+      
        # load all know quickstarts from cache
        quickstarts = get_quickstarts options
        candidates = {}
        quickstarts.each do |category, meta|
            meta.each do |template|
+
+             if options[:debug]
+                 say_debug "found " + template["name"]
+             end
+             
              # find a match by quickstart name
              if template["name"] == options[:name]
-               candidates[template["repo"]] = template
+                 candidates[template["repo"]] = template
              end
           end
        end
        
        if candidates.length > 0
+
          # if we have > matches on the name, give user a choice
          if candidates.length > 1
            index = 1
@@ -174,6 +188,7 @@ class Generator < Thor
            else
              say_error "Choice was not valid."
            end
+
          else
            # We only found one match for that quickstart name
            candidates.each do |category, template|
